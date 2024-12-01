@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team_accesses",
+  "info": {
+    "singularName": "team-access",
+    "pluralName": "team-accesses",
+    "displayName": "teamAccess",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "id_teamAcces": {
+      "type": "string"
+    },
+    "state": {
+      "type": "boolean"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "email_access": {
+      "type": "string"
+    },
+    "team_type_role_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::team-type-role.team-type-role"
+    }
+  }
+}

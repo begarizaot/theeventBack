@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ticket_types",
+  "info": {
+    "singularName": "ticket-type",
+    "pluralName": "ticket-types",
+    "displayName": "ticketTypes",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "max_capacity": {
+      "type": "integer"
+    },
+    "event_capacity": {
+      "type": "integer"
+    },
+    "max_quantity_limit": {
+      "type": "integer"
+    },
+    "min_quantity_limit": {
+      "type": "integer"
+    },
+    "is_visible": {
+      "type": "boolean"
+    },
+    "soldOut": {
+      "type": "boolean"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    },
+    "ticket_sales_period_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ticket-sales-period.ticket-sales-period"
+    },
+    "available": {
+      "type": "boolean"
+    }
+  }
+}

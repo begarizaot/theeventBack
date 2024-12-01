@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "event_genders",
+  "info": {
+    "singularName": "event-gender",
+    "pluralName": "event-genders",
+    "displayName": "eventGenre",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

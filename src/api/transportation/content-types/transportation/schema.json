@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transportations",
+  "info": {
+    "singularName": "transportation",
+    "pluralName": "transportations",
+    "displayName": "transportation"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "details": {
+      "type": "blocks"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    }
+  }
+}

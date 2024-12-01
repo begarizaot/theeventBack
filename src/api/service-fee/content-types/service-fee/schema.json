@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "service_fees",
+  "info": {
+    "singularName": "service-fee",
+    "pluralName": "service-fees",
+    "displayName": "ServiceFee"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "priceToCharge": {
+      "type": "json"
+    }
+  }
+}

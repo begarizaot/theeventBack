@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discount_codes",
+  "info": {
+    "singularName": "discount-code",
+    "pluralName": "discount-codes",
+    "displayName": "discountCode",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "value": {
+      "type": "decimal"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "val",
+        "por"
+      ]
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "amount_max": {
+      "type": "integer"
+    }
+  }
+}

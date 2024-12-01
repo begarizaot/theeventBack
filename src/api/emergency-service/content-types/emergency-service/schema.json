@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "emergency_services",
+  "info": {
+    "singularName": "emergency-service",
+    "pluralName": "emergency-services",
+    "displayName": "emergencyServices"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "details": {
+      "type": "blocks"
+    },
+    "service_type": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    }
+  }
+}

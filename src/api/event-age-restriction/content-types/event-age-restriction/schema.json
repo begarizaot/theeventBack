@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "event_age_restrictions",
+  "info": {
+    "singularName": "event-age-restriction",
+    "pluralName": "event-age-restrictions",
+    "displayName": "eventAgeRestrictions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

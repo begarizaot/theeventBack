@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "status_events",
+  "info": {
+    "singularName": "status-event",
+    "pluralName": "status-events",
+    "displayName": "statusEvents"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

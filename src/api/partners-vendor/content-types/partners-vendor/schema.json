@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "partners_vendors",
+  "info": {
+    "singularName": "partners-vendor",
+    "pluralName": "partners-vendors",
+    "displayName": "partnersVendors"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "contact_info": {
+      "type": "blocks"
+    },
+    "type": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    }
+  }
+}

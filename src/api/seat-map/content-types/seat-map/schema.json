@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "seat_maps",
+  "info": {
+    "singularName": "seat-map",
+    "pluralName": "seat-maps",
+    "displayName": "seatMaps"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "configuration": {
+      "type": "json"
+    },
+    "venue_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::venue.venue"
+    }
+  }
+}
