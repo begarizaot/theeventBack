@@ -16,7 +16,7 @@
       "type": "string"
     },
     "description": {
-      "type": "blocks"
+      "type": "richtext"
     },
     "price": {
       "type": "decimal"

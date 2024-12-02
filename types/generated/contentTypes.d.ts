@@ -1363,7 +1363,7 @@ export interface ApiTicketTypeTicketType extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    description: Attribute.Blocks;
+    description: Attribute.RichText;
     price: Attribute.Decimal;
     max_capacity: Attribute.Integer;
     event_capacity: Attribute.Integer;
