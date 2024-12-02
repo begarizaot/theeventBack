@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const populate = {
   organizer_id: {
     select: ["id", "email", "firstname", "lastname", "phone"],
@@ -43,6 +45,9 @@ const findPageEvent = async (
   return strapi.query("api::event.event").findPage({
     where: {
       ...where,
+      end_date: {
+        $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
+      },
       publishedAt: {
         $null: false,
       },

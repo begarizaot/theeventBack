@@ -50,14 +50,43 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       const { query } = ctx;
       const { page, size } = query;
 
+      const events = await findPageEvent(strapi, null, {
+        page,
+        pageSize: size,
+      });
+
+      const results = await Promise.all(
+        events.results.map(async (event) => {
+          const formattedEvent = await formatDataEvent(strapi, event);
+          return { ...event, ...formattedEvent };
+        })
+      );
+
+      return {
+        data: results,
+        pagination: events.pagination,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: error.message || "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventSearch(ctx) {
+    try {
+      const { query } = ctx;
+      const { eventName } = query;
+
       const events = await findPageEvent(
         strapi,
         {
-          end_date: {
-            $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
-          },
+          event_name: { $containsi: eventName || "" },
         },
-        { page, pageSize: size }
+        { page: 1, pageSize: 2 }
       );
 
       const results = await Promise.all(

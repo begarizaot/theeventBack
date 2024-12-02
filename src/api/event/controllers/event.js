@@ -18,5 +18,15 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       .getEventList({ params, body, query });
     return response;
   },
+  async getEventSearch(ctx) {
+    const {
+      params,
+      request: { body, query },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .getEventSearch({ params, body, query });
+    return response;
+  },
   // -------------------------------------------------------------
 }));

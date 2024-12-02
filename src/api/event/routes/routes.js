@@ -9,6 +9,14 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "GET",
+      path: "/event/getEventSearch",
+      handler: "event.getEventSearch",
+      config: {
+        auth: false,
+      },
+    },
     // -------------------------------------------------------------
   ],
 };
