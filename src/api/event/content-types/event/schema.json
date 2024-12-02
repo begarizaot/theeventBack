@@ -12,107 +12,64 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "contact_email": {
-      "type": "email"
-    },
-    "contact_phone": {
+    "id_event": {
       "type": "string"
-    },
-    "description": {
-      "type": "blocks"
-    },
-    "detailed_description": {
-      "type": "blocks"
-    },
-    "end_time": {
-      "type": "time"
-    },
-    "event_date": {
-      "type": "date"
     },
     "event_name": {
       "type": "string"
     },
-    "has_seating": {
-      "type": "boolean"
+    "description": {
+      "type": "richtext"
     },
-    "location": {
+    "start_date": {
+      "type": "datetime"
+    },
+    "end_date": {
+      "type": "datetime"
+    },
+    "youtube_url": {
       "type": "string"
     },
-    "start_time": {
-      "type": "time"
+    "contact_phone": {
+      "type": "string"
     },
-    "youtube_video_url": {
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "venue": {
       "type": "string"
     },
     "event_category_id": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::event-categorie.event-categorie"
-    },
-    "event_type_id": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::event-type.event-type"
-    },
-    "event_gender_id": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::event-gender.event-gender"
     },
     "organizer_id": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "seatmap_id": {
+    "event_age_restriction_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::seat-map.seat-map"
-    },
-    "venue_id": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::venue.venue"
-    },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "target": "api::event-age-restriction.event-age-restriction"
     },
     "status_event_id": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::status-event.status-event"
     },
-    "event_age_restriction_id": {
+    "map_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::event-age-restriction.event-age-restriction"
-    },
-    "place_id": {
-      "type": "string"
-    },
-    "url_name": {
-      "type": "string"
-    },
-    "id_event": {
-      "type": "string"
-    },
-    "location_comp": {
-      "type": "string"
-    },
-    "venue": {
-      "type": "string"
-    },
-    "imageMap": {
-      "type": "string"
+      "target": "api::map.map"
     }
   }
 }

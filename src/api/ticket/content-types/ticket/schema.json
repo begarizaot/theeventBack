@@ -12,8 +12,14 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "id_ticket": {
+      "type": "string"
+    },
     "scanner": {
       "type": "boolean"
+    },
+    "scanner_date": {
+      "type": "datetime"
     },
     "order_id": {
       "type": "relation",
@@ -24,12 +30,6 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::ticket-type.ticket-type"
-    },
-    "scanner_date": {
-      "type": "datetime"
-    },
-    "id_ticket": {
-      "type": "string"
     },
     "event_id": {
       "type": "relation",

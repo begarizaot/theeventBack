@@ -790,149 +790,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiAccommodationAccommodation extends Schema.CollectionType {
-  collectionName: 'accommodations';
-  info: {
-    singularName: 'accommodation';
-    pluralName: 'accommodations';
-    displayName: 'accommodations';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    address: Attribute.String;
-    amenities: Attribute.JSON;
-    check_in_time: Attribute.DateTime;
-    check_out_time: Attribute.DateTime;
-    name: Attribute.String;
-    type: Attribute.String;
-    event_id: Attribute.Relation<
-      'api::accommodation.accommodation',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::accommodation.accommodation',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::accommodation.accommodation',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiActivitieActivitie extends Schema.CollectionType {
-  collectionName: 'activities';
-  info: {
-    singularName: 'activitie';
-    pluralName: 'activities';
-    displayName: 'activities';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    description: Attribute.Blocks;
-    schedule: Attribute.Date;
-    event_id: Attribute.Relation<
-      'api::activitie.activitie',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::activitie.activitie',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::activitie.activitie',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiContactContact extends Schema.CollectionType {
-  collectionName: 'contacts';
-  info: {
-    singularName: 'contact';
-    pluralName: 'contacts';
-    displayName: 'contact';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    firstname: Attribute.String;
-    lastname: Attribute.String;
-    email: Attribute.Email;
-    message: Attribute.Text;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::contact.contact',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::contact.contact',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiDiscountDiscount extends Schema.CollectionType {
-  collectionName: 'discounts';
-  info: {
-    singularName: 'discount';
-    pluralName: 'discounts';
-    displayName: 'discounts';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    code: Attribute.String;
-    end_date: Attribute.DateTime;
-    start_date: Attribute.DateTime;
-    percentage: Attribute.Integer;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::discount.discount',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::discount.discount',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiDiscountCodeDiscountCode extends Schema.CollectionType {
   collectionName: 'discount_codes';
   info: {
@@ -946,49 +803,12 @@ export interface ApiDiscountCodeDiscountCode extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    value: Attribute.Decimal;
     state: Attribute.Enumeration<['val', 'por']>;
-    event_id: Attribute.Relation<
-      'api::discount-code.discount-code',
-      'oneToOne',
-      'api::event.event'
-    >;
+    value: Attribute.Decimal;
     amount: Attribute.Integer;
     amount_max: Attribute.Integer;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::discount-code.discount-code',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::discount-code.discount-code',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiEmergencyServiceEmergencyService
-  extends Schema.CollectionType {
-  collectionName: 'emergency_services';
-  info: {
-    singularName: 'emergency-service';
-    pluralName: 'emergency-services';
-    displayName: 'emergencyServices';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    details: Attribute.Blocks;
-    service_type: Attribute.String;
     event_id: Attribute.Relation<
-      'api::emergency-service.emergency-service',
+      'api::discount-code.discount-code',
       'oneToOne',
       'api::event.event'
     >;
@@ -996,13 +816,13 @@ export interface ApiEmergencyServiceEmergencyService
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::emergency-service.emergency-service',
+      'api::discount-code.discount-code',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::emergency-service.emergency-service',
+      'api::discount-code.discount-code',
       'oneToOne',
       'admin::user'
     > &
@@ -1022,64 +842,36 @@ export interface ApiEventEvent extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    contact_email: Attribute.Email;
-    contact_phone: Attribute.String;
-    description: Attribute.Blocks;
-    detailed_description: Attribute.Blocks;
-    end_time: Attribute.Time;
-    event_date: Attribute.Date;
+    id_event: Attribute.String;
     event_name: Attribute.String;
-    has_seating: Attribute.Boolean;
-    location: Attribute.String;
-    start_time: Attribute.Time;
-    youtube_video_url: Attribute.String;
+    description: Attribute.RichText;
+    start_date: Attribute.DateTime;
+    end_date: Attribute.DateTime;
+    youtube_url: Attribute.String;
+    contact_phone: Attribute.String;
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    venue: Attribute.String;
     event_category_id: Attribute.Relation<
       'api::event.event',
-      'oneToMany',
+      'oneToOne',
       'api::event-categorie.event-categorie'
-    >;
-    event_type_id: Attribute.Relation<
-      'api::event.event',
-      'oneToMany',
-      'api::event-type.event-type'
-    >;
-    event_gender_id: Attribute.Relation<
-      'api::event.event',
-      'oneToMany',
-      'api::event-gender.event-gender'
     >;
     organizer_id: Attribute.Relation<
       'api::event.event',
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    seatmap_id: Attribute.Relation<
-      'api::event.event',
-      'oneToOne',
-      'api::seat-map.seat-map'
-    >;
-    venue_id: Attribute.Relation<
-      'api::event.event',
-      'oneToOne',
-      'api::venue.venue'
-    >;
-    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    status_event_id: Attribute.Relation<
-      'api::event.event',
-      'oneToOne',
-      'api::status-event.status-event'
-    >;
     event_age_restriction_id: Attribute.Relation<
       'api::event.event',
       'oneToOne',
       'api::event-age-restriction.event-age-restriction'
     >;
-    place_id: Attribute.String;
-    url_name: Attribute.String;
-    id_event: Attribute.String;
-    location_comp: Attribute.String;
-    venue: Attribute.String;
-    imageMap: Attribute.String;
+    status_event_id: Attribute.Relation<
+      'api::event.event',
+      'oneToOne',
+      'api::status-event.status-event'
+    >;
+    map_id: Attribute.Relation<'api::event.event', 'oneToOne', 'api::map.map'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1160,99 +952,26 @@ export interface ApiEventCategorieEventCategorie extends Schema.CollectionType {
   };
 }
 
-export interface ApiEventGenderEventGender extends Schema.CollectionType {
-  collectionName: 'event_genders';
+export interface ApiMapMap extends Schema.CollectionType {
+  collectionName: 'maps';
   info: {
-    singularName: 'event-gender';
-    pluralName: 'event-genders';
-    displayName: 'eventGenre';
-    description: '';
+    singularName: 'map';
+    pluralName: 'maps';
+    displayName: 'maps';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
+    idMap: Attribute.String;
+    label: Attribute.String;
+    labelCompl: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::event-gender.event-gender',
-      'oneToOne',
-      'admin::user'
-    > &
+    createdBy: Attribute.Relation<'api::map.map', 'oneToOne', 'admin::user'> &
       Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::event-gender.event-gender',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiEventTypeEventType extends Schema.CollectionType {
-  collectionName: 'event_types';
-  info: {
-    singularName: 'event-type';
-    pluralName: 'event-types';
-    displayName: 'eventType';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::event-type.event-type',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::event-type.event-type',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiMealPlanMealPlan extends Schema.CollectionType {
-  collectionName: 'meal_plans';
-  info: {
-    singularName: 'meal-plan';
-    pluralName: 'meal-plans';
-    displayName: 'mealPlans';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    details: Attribute.JSON;
-    event_id: Attribute.Relation<
-      'api::meal-plan.meal-plan',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::meal-plan.meal-plan',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::meal-plan.meal-plan',
-      'oneToOne',
-      'admin::user'
-    > &
+    updatedBy: Attribute.Relation<'api::map.map', 'oneToOne', 'admin::user'> &
       Attribute.Private;
   };
 }
@@ -1305,7 +1024,11 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    id_order: Attribute.String;
     strype_id: Attribute.String;
+    total_price: Attribute.Decimal;
+    price: Attribute.JSON;
+    smsEmail: Attribute.Boolean;
     event_id: Attribute.Relation<
       'api::order.order',
       'oneToOne',
@@ -1316,15 +1039,11 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    total_price: Attribute.Decimal;
-    price: Attribute.JSON;
     status_order_id: Attribute.Relation<
       'api::order.order',
       'oneToOne',
       'api::status-order.status-order'
     >;
-    id_order: Attribute.String;
-    smsEmail: Attribute.Boolean;
     discount_code_id: Attribute.Relation<
       'api::order.order',
       'oneToOne',
@@ -1341,148 +1060,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::order.order',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPackageOptionPackageOption extends Schema.CollectionType {
-  collectionName: 'package_options';
-  info: {
-    singularName: 'package-option';
-    pluralName: 'package-options';
-    displayName: 'packageOptions';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    description: Attribute.Blocks;
-    price: Attribute.Integer;
-    event_id: Attribute.Relation<
-      'api::package-option.package-option',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::package-option.package-option',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::package-option.package-option',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPartnersVendorPartnersVendor extends Schema.CollectionType {
-  collectionName: 'partners_vendors';
-  info: {
-    singularName: 'partners-vendor';
-    pluralName: 'partners-vendors';
-    displayName: 'partnersVendors';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    contact_info: Attribute.Blocks;
-    type: Attribute.String;
-    event_id: Attribute.Relation<
-      'api::partners-vendor.partners-vendor',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::partners-vendor.partners-vendor',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::partners-vendor.partners-vendor',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPaymentPayment extends Schema.CollectionType {
-  collectionName: 'payments';
-  info: {
-    singularName: 'payment';
-    pluralName: 'payments';
-    displayName: 'payments';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    amount: Attribute.Integer;
-    payment_date: Attribute.DateTime;
-    payment_method: Attribute.String;
-    order_id: Attribute.Relation<
-      'api::payment.payment',
-      'oneToOne',
-      'api::order.order'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::payment.payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::payment.payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPluginPlugin extends Schema.SingleType {
-  collectionName: 'plugins';
-  info: {
-    singularName: 'plugin';
-    pluralName: 'plugins';
-    displayName: 'plugins';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    state: Attribute.Boolean;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::plugin.plugin',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::plugin.plugin',
       'oneToOne',
       'admin::user'
     > &
@@ -1513,41 +1090,6 @@ export interface ApiPrivacyPolicyPrivacyPolicy extends Schema.SingleType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::privacy-policy.privacy-policy',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiSeatMapSeatMap extends Schema.CollectionType {
-  collectionName: 'seat_maps';
-  info: {
-    singularName: 'seat-map';
-    pluralName: 'seat-maps';
-    displayName: 'seatMaps';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    configuration: Attribute.JSON;
-    venue_id: Attribute.Relation<
-      'api::seat-map.seat-map',
-      'oneToOne',
-      'api::venue.venue'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::seat-map.seat-map',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::seat-map.seat-map',
       'oneToOne',
       'admin::user'
     > &
@@ -1645,36 +1187,6 @@ export interface ApiStatusOrderStatusOrder extends Schema.CollectionType {
   };
 }
 
-export interface ApiStatusPaymentStatusPayment extends Schema.CollectionType {
-  collectionName: 'status_payments';
-  info: {
-    singularName: 'status-payment';
-    pluralName: 'status-payments';
-    displayName: 'statusPayments';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::status-payment.status-payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::status-payment.status-payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiTeamAccessTeamAccess extends Schema.CollectionType {
   collectionName: 'team_accesses';
   info: {
@@ -1688,6 +1200,7 @@ export interface ApiTeamAccessTeamAccess extends Schema.CollectionType {
   };
   attributes: {
     id_teamAcces: Attribute.String;
+    email_access: Attribute.String;
     state: Attribute.Boolean;
     event_id: Attribute.Relation<
       'api::team-access.team-access',
@@ -1699,7 +1212,6 @@ export interface ApiTeamAccessTeamAccess extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    email_access: Attribute.String;
     team_type_role_id: Attribute.Relation<
       'api::team-access.team-access',
       'oneToOne',
@@ -1797,7 +1309,9 @@ export interface ApiTicketTicket extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    id_ticket: Attribute.String;
     scanner: Attribute.Boolean;
+    scanner_date: Attribute.DateTime;
     order_id: Attribute.Relation<
       'api::ticket.ticket',
       'oneToOne',
@@ -1808,8 +1322,6 @@ export interface ApiTicketTicket extends Schema.CollectionType {
       'oneToOne',
       'api::ticket-type.ticket-type'
     >;
-    scanner_date: Attribute.DateTime;
-    id_ticket: Attribute.String;
     event_id: Attribute.Relation<
       'api::ticket.ticket',
       'oneToOne',
@@ -1831,40 +1343,6 @@ export interface ApiTicketTicket extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::ticket.ticket',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTicketSalesPeriodTicketSalesPeriod
-  extends Schema.CollectionType {
-  collectionName: 'ticket_sales_periods';
-  info: {
-    singularName: 'ticket-sales-period';
-    pluralName: 'ticket-sales-periods';
-    displayName: 'ticketSalesPeriods';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    end_date: Attribute.Date;
-    end_time: Attribute.Time;
-    start_date: Attribute.Date;
-    start_time: Attribute.Time;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::ticket-sales-period.ticket-sales-period',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::ticket-sales-period.ticket-sales-period',
       'oneToOne',
       'admin::user'
     > &
@@ -1885,25 +1363,22 @@ export interface ApiTicketTypeTicketType extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
-    price: Attribute.Decimal;
     description: Attribute.Blocks;
+    price: Attribute.Decimal;
     max_capacity: Attribute.Integer;
     event_capacity: Attribute.Integer;
     max_quantity_limit: Attribute.Integer;
     min_quantity_limit: Attribute.Integer;
     is_visible: Attribute.Boolean;
     soldOut: Attribute.Boolean;
-    event_id: Attribute.Relation<
-      'api::ticket-type.ticket-type',
-      'oneToOne',
-      'api::event.event'
-    >;
-    ticket_sales_period_id: Attribute.Relation<
-      'api::ticket-type.ticket-type',
-      'oneToOne',
-      'api::ticket-sales-period.ticket-sales-period'
-    >;
     available: Attribute.Boolean;
+    start_date: Attribute.DateTime;
+    end_date: Attribute.DateTime;
+    event_id: Attribute.Relation<
+      'api::ticket-type.ticket-type',
+      'oneToOne',
+      'api::event.event'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1915,145 +1390,6 @@ export interface ApiTicketTypeTicketType extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::ticket-type.ticket-type',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTransportationTransportation extends Schema.CollectionType {
-  collectionName: 'transportations';
-  info: {
-    singularName: 'transportation';
-    pluralName: 'transportations';
-    displayName: 'transportation';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    details: Attribute.Blocks;
-    event_id: Attribute.Relation<
-      'api::transportation.transportation',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::transportation.transportation',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::transportation.transportation',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTravelPackageTravelPackage extends Schema.CollectionType {
-  collectionName: 'travel_packages';
-  info: {
-    singularName: 'travel-package';
-    pluralName: 'travel-packages';
-    displayName: 'travelPackages';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    description: Attribute.Blocks;
-    price: Attribute.Integer;
-    event_id: Attribute.Relation<
-      'api::travel-package.travel-package',
-      'oneToOne',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::travel-package.travel-package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::travel-package.travel-package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserPreferenceUserPreference extends Schema.CollectionType {
-  collectionName: 'user_preferences';
-  info: {
-    singularName: 'user-preference';
-    pluralName: 'user-preferences';
-    displayName: 'userPreferences';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    preferences: Attribute.JSON;
-    user_id: Attribute.Relation<
-      'api::user-preference.user-preference',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-preference.user-preference',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-preference.user-preference',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiVenueVenue extends Schema.CollectionType {
-  collectionName: 'venues';
-  info: {
-    singularName: 'venue';
-    pluralName: 'venues';
-    displayName: 'venue';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    address: Attribute.String;
-    capacity: Attribute.Integer;
-    name: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::venue.venue',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::venue.venue',
       'oneToOne',
       'admin::user'
     > &
@@ -2079,40 +1415,22 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::accommodation.accommodation': ApiAccommodationAccommodation;
-      'api::activitie.activitie': ApiActivitieActivitie;
-      'api::contact.contact': ApiContactContact;
-      'api::discount.discount': ApiDiscountDiscount;
       'api::discount-code.discount-code': ApiDiscountCodeDiscountCode;
-      'api::emergency-service.emergency-service': ApiEmergencyServiceEmergencyService;
       'api::event.event': ApiEventEvent;
       'api::event-age-restriction.event-age-restriction': ApiEventAgeRestrictionEventAgeRestriction;
       'api::event-categorie.event-categorie': ApiEventCategorieEventCategorie;
-      'api::event-gender.event-gender': ApiEventGenderEventGender;
-      'api::event-type.event-type': ApiEventTypeEventType;
-      'api::meal-plan.meal-plan': ApiMealPlanMealPlan;
+      'api::map.map': ApiMapMap;
       'api::notification.notification': ApiNotificationNotification;
       'api::order.order': ApiOrderOrder;
-      'api::package-option.package-option': ApiPackageOptionPackageOption;
-      'api::partners-vendor.partners-vendor': ApiPartnersVendorPartnersVendor;
-      'api::payment.payment': ApiPaymentPayment;
-      'api::plugin.plugin': ApiPluginPlugin;
       'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;
-      'api::seat-map.seat-map': ApiSeatMapSeatMap;
       'api::service-fee.service-fee': ApiServiceFeeServiceFee;
       'api::status-event.status-event': ApiStatusEventStatusEvent;
       'api::status-order.status-order': ApiStatusOrderStatusOrder;
-      'api::status-payment.status-payment': ApiStatusPaymentStatusPayment;
       'api::team-access.team-access': ApiTeamAccessTeamAccess;
       'api::team-type-role.team-type-role': ApiTeamTypeRoleTeamTypeRole;
       'api::terms-and-condition.terms-and-condition': ApiTermsAndConditionTermsAndCondition;
       'api::ticket.ticket': ApiTicketTicket;
-      'api::ticket-sales-period.ticket-sales-period': ApiTicketSalesPeriodTicketSalesPeriod;
       'api::ticket-type.ticket-type': ApiTicketTypeTicketType;
-      'api::transportation.transportation': ApiTransportationTransportation;
-      'api::travel-package.travel-package': ApiTravelPackageTravelPackage;
-      'api::user-preference.user-preference': ApiUserPreferenceUserPreference;
-      'api::venue.venue': ApiVenueVenue;
     }
   }
 }

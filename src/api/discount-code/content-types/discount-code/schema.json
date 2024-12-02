@@ -15,9 +15,6 @@
     "name": {
       "type": "string"
     },
-    "value": {
-      "type": "decimal"
-    },
     "state": {
       "type": "enumeration",
       "enum": [
@@ -25,16 +22,19 @@
         "por"
       ]
     },
-    "event_id": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::event.event"
+    "value": {
+      "type": "decimal"
     },
     "amount": {
       "type": "integer"
     },
     "amount_max": {
       "type": "integer"
+    },
+    "event_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
     }
   }
 }

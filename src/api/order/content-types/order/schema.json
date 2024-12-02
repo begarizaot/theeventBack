@@ -12,8 +12,20 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "id_order": {
+      "type": "string"
+    },
     "strype_id": {
       "type": "string"
+    },
+    "total_price": {
+      "type": "decimal"
+    },
+    "price": {
+      "type": "json"
+    },
+    "smsEmail": {
+      "type": "boolean"
     },
     "event_id": {
       "type": "relation",
@@ -25,22 +37,10 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "total_price": {
-      "type": "decimal"
-    },
-    "price": {
-      "type": "json"
-    },
     "status_order_id": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::status-order.status-order"
-    },
-    "id_order": {
-      "type": "string"
-    },
-    "smsEmail": {
-      "type": "boolean"
     },
     "discount_code_id": {
       "type": "relation",

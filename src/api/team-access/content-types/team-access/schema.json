@@ -15,6 +15,9 @@
     "id_teamAcces": {
       "type": "string"
     },
+    "email_access": {
+      "type": "string"
+    },
     "state": {
       "type": "boolean"
     },
@@ -27,9 +30,6 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
-    },
-    "email_access": {
-      "type": "string"
     },
     "team_type_role_id": {
       "type": "relation",
