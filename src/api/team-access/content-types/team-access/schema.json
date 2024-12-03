@@ -15,9 +15,6 @@
     "id_teamAcces": {
       "type": "string"
     },
-    "email_access": {
-      "type": "string"
-    },
     "state": {
       "type": "boolean"
     },

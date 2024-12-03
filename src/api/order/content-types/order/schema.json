@@ -15,7 +15,7 @@
     "id_order": {
       "type": "string"
     },
-    "strype_id": {
+    "stripe_id": {
       "type": "string"
     },
     "total_price": {

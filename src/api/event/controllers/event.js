@@ -10,22 +10,72 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   // GET
   async getEventList(ctx) {
     const {
-      params,
-      request: { body, query },
+      request: { query },
     } = ctx;
     const response = await strapi
       .service("api::event.event")
-      .getEventList({ params, body, query });
+      .getEventList({ query });
     return response;
   },
   async getEventSearch(ctx) {
     const {
-      params,
-      request: { body, query },
+      request: { query },
     } = ctx;
     const response = await strapi
       .service("api::event.event")
-      .getEventSearch({ params, body, query });
+      .getEventSearch({ query });
+    return response;
+  },
+  async getEventDetail(ctx) {
+    const { params } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .getEventDetail({ params });
+    return response;
+  },
+  async getMyEventList(ctx) {
+    const {
+      request: { query },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .getMyEventList({ query, user });
+    return response;
+  },
+  async getEventSharedList(ctx) {
+    const {
+      request: { query },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .getEventSharedList({ query, user });
+    return response;
+  },
+  // -------------------------------------------------------------
+  // POTS
+  async postCreateEvent(ctx) {
+    const {
+      request: { body },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .postCreateEvent({ body, user });
+    return response;
+  },
+  // -------------------------------------------------------------
+  // PUT
+  async putUpdateEventImage(ctx) {
+    const {
+      params,
+      request: { files },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .putUpdateEventImage({ user, params, files });
     return response;
   },
   // -------------------------------------------------------------

@@ -17,6 +17,38 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "GET",
+      path: "/event/getEventDetail/:id",
+      handler: "event.getEventDetail",
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: "GET",
+      path: "/event/getMyEventList",
+      handler: "event.getMyEventList",
+    },
+    {
+      method: "GET",
+      path: "/event/getEventSharedList",
+      handler: "event.getEventSharedList",
+    },
+    // -------------------------------------------------------------
+    // POST
+    {
+      method: "POST",
+      path: "/event/postCreateEvent",
+      handler: "event.postCreateEvent",
+    },
+    // -------------------------------------------------------------
+    // PUT
+    {
+      method: "PUT",
+      path: "/event/putUpdateEventImage/:id",
+      handler: "event.putUpdateEventImage",
+    },
     // -------------------------------------------------------------
   ],
 };

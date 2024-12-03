@@ -1,22 +1,36 @@
 "use strict";
 
 const moment = require("moment");
+const { deletePreviousImage } = require("../../../services/cloudinary");
+const { encrypt } = require("../../../services/crypto");
 
-const { findPageEvent } = require("./services");
-
-const { fetchTicketTypes } = require("../../ticket-type/services/services");
+const { validateOrCreateMap } = require("../../map/services/services");
+const { findManyTeamAccess } = require("../../team-access/services/services");
+const {
+  findPageEvent,
+  findOneEvent,
+  updateEvent,
+  createEvent,
+} = require("./services");
+const {
+  findManyTicketTypes,
+  createManyTicketTypes,
+  updateTicketTypes,
+} = require("../../ticket-type/services/services");
 
 /**
  * discount service
  */
 
-const formatDataEvent = async (strapi, event) => {
+const formatDataEvent = async (event, admin = false) => {
   // Obtener tipos de tickets
-  const ticketTypes = await fetchTicketTypes(strapi, {
+  const ticketTypes = await findManyTicketTypes({
     event_id: event.id,
-    end_date: {
-      $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
-    },
+    ...(!admin && {
+      end_date: {
+        $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
+      },
+    }),
   });
 
   // Calcular valores mínimo y máximo
@@ -40,6 +54,13 @@ const minMaxValues = (validTickets) => {
   };
 };
 
+async function deleteImage(imageId) {
+  const filesData = await strapi.db.query("plugin::upload.file").delete({
+    where: { id: imageId },
+  });
+  deletePreviousImage(filesData.provider_metadata.public_id);
+}
+
 const { createCoreService } = require("@strapi/strapi").factories;
 
 const apiEvent = "api::event.event";
@@ -50,14 +71,14 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       const { query } = ctx;
       const { page, size } = query;
 
-      const events = await findPageEvent(strapi, null, {
+      const events = await findPageEvent(null, {
         page,
         pageSize: size,
       });
 
       const results = await Promise.all(
         events.results.map(async (event) => {
-          const formattedEvent = await formatDataEvent(strapi, event);
+          const formattedEvent = await formatDataEvent(event);
           return { ...event, ...formattedEvent };
         })
       );
@@ -72,7 +93,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       return {
         status: false,
         data: null,
-        message: error.message || "An error occurred while fetching the events",
+        message: "An error occurred while fetching the events",
       };
     }
   },
@@ -82,7 +103,6 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       const { eventName } = query;
 
       const events = await findPageEvent(
-        strapi,
         {
           event_name: { $containsi: eventName || "" },
         },
@@ -91,7 +111,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
 
       const results = await Promise.all(
         events.results.map(async (event) => {
-          const formattedEvent = await formatDataEvent(strapi, event);
+          const formattedEvent = await formatDataEvent(event);
           return { ...event, ...formattedEvent };
         })
       );
@@ -106,7 +126,223 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       return {
         status: false,
         data: null,
-        message: error.message || "An error occurred while fetching the events",
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventDetail(ctx) {
+    try {
+      const { params } = ctx;
+      const { id } = params;
+
+      const event = await findOneEvent({ id_event: id });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      let formData = await formatDataEvent(event);
+
+      formData.sould_out =
+        formData.status_event_id.id != 1 ||
+        moment(formData.start_date)
+          .add(1, "hour")
+          .format("YYYY-MM-DD HH:mm:ss") <
+          moment().format("YYYY-MM-DD HH:mm:ss");
+
+      const visitCount = Number(formData.visitCount || 0) + 1;
+      formData.visitCount = visitCount;
+
+      updateEvent({ id_event: id }, { visitCount: visitCount });
+
+      return {
+        data: formData,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getMyEventList(ctx) {
+    try {
+      const { user, query } = ctx;
+      const { page, size } = query;
+
+      const events = await findPageEvent(
+        { organizer_id: user.id },
+        {
+          page,
+          pageSize: size,
+        },
+        true
+      );
+
+      const results = await Promise.all(
+        events.results.map(async (event) => {
+          const formattedEvent = await formatDataEvent(event, true);
+          return { ...event, ...formattedEvent };
+        })
+      );
+
+      return {
+        data: results,
+        pagination: events.pagination,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventSharedList(ctx) {
+    try {
+      const { user, query } = ctx;
+      const { page, size } = query;
+
+      const teamAccess = await findManyTeamAccess({ user_id: user.id });
+      if (teamAccess?.length == 0) {
+        return { data: null, message: "Team access not found", status: false };
+      }
+
+      const listEvents = await Promise.all(
+        teamAccess.map(async (team) => {
+          const event = await findOneEvent({ id: team.event_id.id });
+          let formData = await formatDataEvent(event);
+          formData.manager = `${formData.organizer_id.firstname} ${formData.organizer_id.lastname}`;
+          return formData;
+        })
+      );
+
+      return {
+        data: listEvents,
+        pagination: {},
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  // -------------------------------------------------------------
+  // POST
+  async postCreateEvent(ctx) {
+    try {
+      const { body, user } = ctx;
+      const { data, ticktes } = body;
+
+      const mapData = await validateOrCreateMap(
+        { idMap: data.map.idMap },
+        data.map
+      );
+
+      if (!mapData) {
+        return {
+          status: false,
+          data: null,
+          message: "An error occurred while fetching the events",
+        };
+      }
+
+      const eventData = {
+        event_name: data.event_name,
+        youtube_url: data.youtube_url,
+        contact_phone: `${data.contact_phone}`,
+        venue: data.venue,
+        description: data.description,
+        start_date: data.start_date,
+        end_date: data.end_date,
+        event_category_id: data.event_category,
+        organizer_id: user?.id,
+        event_age_restriction_id: data.event_age_restriction,
+        status_event_id: 1,
+        map_id: mapData.id,
+      };
+
+      const event = await createEvent(eventData);
+
+      const eventEncrypt = encrypt(`eventId_${event.id}`);
+
+      await updateEvent({ id: event.id }, { id_event: eventEncrypt });
+
+      const listTicktes = ticktes.map((ticket) => ({
+        ...ticket,
+        min_quantity_limit: 1,
+        max_quantity_limit: ticket.max_capacity,
+      }));
+
+      const ticketsTypes = await createManyTicketTypes(listTicktes);
+
+      ticketsTypes.ids.map((id) => {
+        updateTicketTypes({ id }, { event_id: event.id });
+      });
+
+      return {
+        data: eventEncrypt,
+        // data: "5e55d9aed0b228671045",
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  // -------------------------------------------------------------
+  // PUT
+  async putUpdateEventImage(ctx) {
+    try {
+      const { user, params, files } = ctx;
+
+      const event = await findOneEvent({ id_event: params.id });
+
+      if (!event?.id || event.organizer_id.id != user.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      event?.image && event?.image?.id && deleteImage(event.image.id);
+
+      const createdFiles = await strapi.plugins.upload.services.upload.upload({
+        data: {
+          path: "events",
+          fileInfo: {
+            name: `eventId_${event.id}`,
+            caption: "Caption",
+            alternativeText: event.event_name.replace(/ /g, "_"),
+            folder: 1,
+          },
+        },
+        files: files.image,
+      });
+
+      await updateEvent({ id_event: params.id }, { image: createdFiles[0].id });
+
+      return {
+        data: params.id,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
       };
     }
   },

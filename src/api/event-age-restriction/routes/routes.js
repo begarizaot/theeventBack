@@ -3,8 +3,8 @@ module.exports = {
     // GET
     {
       method: "GET",
-      path: "/ticket-type/getListTicketTypeByEvent/:id",
-      handler: "ticket-type.getListTicketTypeByEvent",
+      path: "/event-age-restriction/getListAgeRestriction",
+      handler: "event-age-restriction.getListAgeRestriction",
       config: {
         auth: false,
       },

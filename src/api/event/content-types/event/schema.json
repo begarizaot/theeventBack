@@ -18,6 +18,15 @@
     "event_name": {
       "type": "string"
     },
+    "youtube_url": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "venue": {
+      "type": "string"
+    },
     "description": {
       "type": "richtext"
     },
@@ -27,24 +36,20 @@
     "end_date": {
       "type": "datetime"
     },
-    "youtube_url": {
-      "type": "string"
-    },
-    "contact_phone": {
-      "type": "string"
-    },
     "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
-    "venue": {
-      "type": "string"
+    "visitCount": {
+      "type": "biginteger",
+      "default": 0
     },
     "event_category_id": {
       "type": "relation",

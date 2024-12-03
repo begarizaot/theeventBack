@@ -31,6 +31,12 @@
     "amount_max": {
       "type": "integer"
     },
+    "start_date": {
+      "type": "datetime"
+    },
+    "end_date": {
+      "type": "datetime"
+    },
     "event_id": {
       "type": "relation",
       "relation": "oneToOne",

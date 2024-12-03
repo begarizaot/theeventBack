@@ -21,7 +21,7 @@ const populate = {
   },
 };
 
-const findOneEvent = async (strapi, where = {}) => {
+const findOneEvent = async (where = {}) => {
   return strapi.query("api::event.event").findOne({
     where: {
       ...where,
@@ -29,36 +29,60 @@ const findOneEvent = async (strapi, where = {}) => {
         $null: false,
       },
     },
-    orderBy: { event_date: "asc" },
-    populate: true,
+    orderBy: { start_date: "asc" },
+    populate: populate,
   });
 };
 
 const findPageEvent = async (
-  strapi,
   where = {},
   pageData = {
     pageSize: 10,
     page: 1,
-  }
+  },
+  admin = false
 ) => {
   return strapi.query("api::event.event").findPage({
     where: {
       ...where,
-      end_date: {
-        $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
-      },
+      ...(!admin && {
+        end_date: {
+          $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+      }),
       publishedAt: {
         $null: false,
       },
     },
-    orderBy: { start_date: "asc" },
+    orderBy: { start_date: "desc" },
     populate: populate,
     ...pageData,
+  });
+};
+
+const updateEvent = async (where = {}, data = {}) => {
+  return strapi.query("api::event.event").update({
+    where: {
+      ...where,
+    },
+    data: data,
+    populate: populate,
+  });
+};
+
+const createEvent = async (data = {}) => {
+  return strapi.query("api::event.event").create({
+    data: {
+      ...data,
+      publishedAt: new Date(),
+    },
+    populate: populate,
   });
 };
 
 module.exports = {
   findOneEvent,
   findPageEvent,
+  updateEvent,
+  createEvent,
 };

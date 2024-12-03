@@ -15,6 +15,9 @@
     "name": {
       "type": "string"
     },
+    "color": {
+      "type": "string"
+    },
     "description": {
       "type": "richtext"
     },
@@ -32,9 +35,6 @@
     },
     "min_quantity_limit": {
       "type": "integer"
-    },
-    "is_visible": {
-      "type": "boolean"
     },
     "soldOut": {
       "type": "boolean"

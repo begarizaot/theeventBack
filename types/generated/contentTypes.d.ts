@@ -807,6 +807,8 @@ export interface ApiDiscountCodeDiscountCode extends Schema.CollectionType {
     value: Attribute.Decimal;
     amount: Attribute.Integer;
     amount_max: Attribute.Integer;
+    start_date: Attribute.DateTime;
+    end_date: Attribute.DateTime;
     event_id: Attribute.Relation<
       'api::discount-code.discount-code',
       'oneToOne',
@@ -844,13 +846,14 @@ export interface ApiEventEvent extends Schema.CollectionType {
   attributes: {
     id_event: Attribute.String;
     event_name: Attribute.String;
+    youtube_url: Attribute.String;
+    contact_phone: Attribute.String;
+    venue: Attribute.String;
     description: Attribute.RichText;
     start_date: Attribute.DateTime;
     end_date: Attribute.DateTime;
-    youtube_url: Attribute.String;
-    contact_phone: Attribute.String;
     image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
-    venue: Attribute.String;
+    visitCount: Attribute.BigInteger & Attribute.DefaultTo<0>;
     event_category_id: Attribute.Relation<
       'api::event.event',
       'oneToOne',
@@ -958,6 +961,7 @@ export interface ApiMapMap extends Schema.CollectionType {
     singularName: 'map';
     pluralName: 'maps';
     displayName: 'maps';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -966,6 +970,8 @@ export interface ApiMapMap extends Schema.CollectionType {
     idMap: Attribute.String;
     label: Attribute.String;
     labelCompl: Attribute.String;
+    name: Attribute.String;
+    url: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1025,7 +1031,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
   };
   attributes: {
     id_order: Attribute.String;
-    strype_id: Attribute.String;
+    stripe_id: Attribute.String;
     total_price: Attribute.Decimal;
     price: Attribute.JSON;
     smsEmail: Attribute.Boolean;
@@ -1200,7 +1206,6 @@ export interface ApiTeamAccessTeamAccess extends Schema.CollectionType {
   };
   attributes: {
     id_teamAcces: Attribute.String;
-    email_access: Attribute.String;
     state: Attribute.Boolean;
     event_id: Attribute.Relation<
       'api::team-access.team-access',
@@ -1327,11 +1332,6 @@ export interface ApiTicketTicket extends Schema.CollectionType {
       'oneToOne',
       'api::event.event'
     >;
-    user_id: Attribute.Relation<
-      'api::ticket.ticket',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1363,13 +1363,13 @@ export interface ApiTicketTypeTicketType extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
+    color: Attribute.String;
     description: Attribute.RichText;
     price: Attribute.Decimal;
     max_capacity: Attribute.Integer;
     event_capacity: Attribute.Integer;
     max_quantity_limit: Attribute.Integer;
     min_quantity_limit: Attribute.Integer;
-    is_visible: Attribute.Boolean;
     soldOut: Attribute.Boolean;
     available: Attribute.Boolean;
     start_date: Attribute.DateTime;
