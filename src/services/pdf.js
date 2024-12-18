@@ -72,7 +72,7 @@ const onDataPdf = async (data) => {
           ],
         },
         {
-          image: (await imageURLBase64(events?.image[0]?.url || "")) || "",
+          image: (await imageURLBase64(events?.image && events?.image[0]?.url || "")) || "",
           height: 200,
           width: 180,
           alignment: "center",

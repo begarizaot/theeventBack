@@ -8,29 +8,24 @@ const { createCoreController } = require("@strapi/strapi").factories;
 
 const table = "api::ticket.ticket";
 module.exports = createCoreController(table, ({ strapi }) => ({
-  async listHistoryTicket(ctx) {
-    const data = {
-      params: ctx.params,
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).listHistoryTicket(data);
+  // GET
+  async getListMyTicket(ctx) {
+    const {
+      request: { query },
+      state: { user },
+    } = ctx;
+    let response = await strapi.service(table).getListMyTicket({ user, query });
     return response;
   },
-  async detailTicket(ctx) {
-    const data = {
-      params: ctx.params,
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).detailTicket(data);
+  async getDetailMyTicket(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+    let response = await strapi
+      .service(table)
+      .getDetailMyTicket({ user, params });
     return response;
   },
-  async scanTicketCode(ctx) {
-    const data = {
-      params: ctx.params,
-      user: ctx.state.user,
-      body: ctx.request["body"],
-    };
-    let response = await strapi.service(table).scanTicketCode(data);
-    return response;
-  },
+  // -------------------------------------------------------------
 }));
