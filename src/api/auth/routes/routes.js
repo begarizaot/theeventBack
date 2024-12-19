@@ -1,5 +1,6 @@
 module.exports = {
   routes: [
+    // POST
     {
       method: "POST",
       path: "/auth/postRegisterUser",
@@ -18,13 +19,15 @@ module.exports = {
         auth: false,
       },
     },
+    // -------------------------------------------------------------
+    // PUT
     {
-      method: "POST",
-      path: "/auth/postForgotPasswordUser",
-      handler: "auth.postForgotPasswordUser",
+      method: "PUT",
+      path: "/auth/putUpdateUser",
+      handler: "auth.putUpdateUser",
       config: {
-        policies: [],
-        auth: false,
+        // policies: [],
+        // auth: false,
       },
     },
   ],
