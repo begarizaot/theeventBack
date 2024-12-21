@@ -55,24 +55,31 @@ const onDataPdf = async (data) => {
         {
           marginTop: 50,
           stack: [
-            { text: events?.event_name, bold: true, fontSize: 16 },
-            { text: `(${ticketName})`, color: "#cf0032" },
-            { text: events?.map_id?.labelCompl, marginBottom: 10 },
+            { text: events?.event_name || "", bold: true, fontSize: 16 },
+            { text: `(${ticketName || ""})`, color: "#cf0032" },
+            { text: events?.map_id?.labelCompl || "", marginBottom: 10 },
             {
-              text: `${moment(events?.start_date).format("MMMM DD, YYYY")}`,
-            },
-            {
-              text: `${formHour(events?.start_date)} - ${formHour(
-                events?.end_date
+              text: `${moment(events?.start_date || "").format(
+                "MMMM DD, YYYY"
               )}`,
             },
             {
-              text: `Age Restriction: ${events?.event_age_restriction_id?.name}`,
+              text: `${formHour(events?.start_date || "")} - ${formHour(
+                events?.end_date || ""
+              )}`,
+            },
+            {
+              text: `Age Restriction: ${
+                events?.event_age_restriction_id?.name || ""
+              }`,
             },
           ],
         },
         {
-          image: (await imageURLBase64(events?.image && events?.image[0]?.url || "")) || "",
+          image:
+            (await imageURLBase64(
+              (events?.image && events?.image[0]?.url) || ""
+            )) || "",
           height: 200,
           width: 180,
           alignment: "center",

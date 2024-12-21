@@ -2,6 +2,8 @@
 
 "use strict";
 
+const { validateEmail } = require("../../../services/mails");
+
 const { findOneUser } = require("../services/services");
 const bcrypt = require("bcryptjs");
 
@@ -29,6 +31,15 @@ module.exports = {
       const {
         request: { body },
       } = ctx;
+
+      const emailVal = await validateEmail(body.email);
+      if (!emailVal.status || emailVal.data != "Valid") {
+        return {
+          status: false,
+          data: null,
+          message: "Verify your email not valid",
+        };
+      }
 
       const userData = await findOneUser({ email: { $eqi: body.email } });
 

@@ -9,6 +9,11 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "GET",
+      path: "/order/getForwardMailOrder/:id",
+      handler: "order.getForwardMailOrder",
+    },
     // -------------------------------------------------------------
 
     // POST

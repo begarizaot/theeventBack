@@ -10,6 +10,9 @@ const populate = {
   user_id: {
     select: ["id", "email", "firstname", "lastname", "phone"],
   },
+  discount_code_id: {
+    select: ["id", "name", "value", "state"],
+  },
 };
 
 const findOneOrder = async (where = {}) => {
@@ -35,6 +38,7 @@ const findManyOrder = async (where = {}) => {
       },
     },
     populate: populate,
+    orderBy: { id: "desc" },
   });
 };
 
@@ -55,6 +59,7 @@ const findPageOrder = async (
     },
     populate: populate,
     ...pageData,
+    orderBy: { id: "desc" },
   });
 };
 

@@ -35,6 +35,11 @@ module.exports = {
       path: "/event/getEventSharedList",
       handler: "event.getEventSharedList",
     },
+    {
+      method: "GET",
+      path: "/event/getEventAnalytics/:id",
+      handler: "event.getEventAnalytics",
+    },
     // -------------------------------------------------------------
     // POST
     {

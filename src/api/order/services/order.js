@@ -1,10 +1,13 @@
 "use strict";
 
+const { completeOrderEmail } = require("../../../services/mailsForm");
 const { validateOrCreateUser } = require("../../auth/services/services");
-
 const { generateListPdfTickets } = require("../../../services/pdf");
-const { getUniqueObjects } = require("../../../services/general");
-const { validateEmail } = require("../../../services/mails");
+const {
+  getUniqueObjects,
+  reduceElements,
+} = require("../../../services/general");
+const { validateEmail, mailOrderCreated } = require("../../../services/mails");
 const { encrypt } = require("../../../services/crypto");
 
 const {
@@ -36,36 +39,88 @@ const {
 
 const { createCoreService } = require("@strapi/strapi").factories;
 
+const onOrderEventTickets = async (idOrder) => {
+  return new Promise(async (resolve, reject) => {
+    const order = await findOneOrder({ id_order: idOrder });
+    if (!order?.id) {
+      return reject({
+        status: false,
+        data: null,
+        message: "Order not found",
+      });
+    }
+
+    if (!order.stripe_id) {
+      return reject({
+        status: false,
+        data: null,
+        message: "Order not found",
+      });
+    }
+
+    const paymentInte = await retrievePaymentIntents(order.stripe_id);
+    if (!paymentInte?.status?.includes("succe")) {
+      return reject({
+        status: false,
+        data: null,
+        message: "Payment not found",
+      });
+    }
+
+    const tickets = await findManyTicket({ order_id: order.id });
+
+    const events = await findOneEvent({ id: order.event_id.id });
+
+    resolve({ ...order, tickets, events });
+  });
+};
+
 module.exports = createCoreService("api::order.order", ({ strapi }) => ({
   // GET
   async getDowloandOrder(ctx) {
     try {
       const { params } = ctx;
-      const order = await findOneOrder({ id_order: params.id });
-      if (!order?.id) {
-        return {
-          status: false,
-          data: null,
-          message: "Order not found",
-        };
-      }
-
-      const paymentInte = await retrievePaymentIntents(order.stripe_id);
-      if (!paymentInte?.status?.includes("succe")) {
-        return {
-          status: false,
-          data: null,
-          message: "Payment not found",
-        };
-      }
-
-      const tickets = await findManyTicket({ order_id: order.id });
-      const events = await findOneEvent({ id: order.event_id.id });
-
-      const pdf = await generateListPdfTickets({ ...order, tickets, events });
-
+      const resData = await onOrderEventTickets(params.id);
+      const pdf = await generateListPdfTickets(resData);
       return {
         data: pdf,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the order",
+      };
+    }
+  },
+  async getForwardMailOrder(ctx) {
+    try {
+      const { params } = ctx;
+      const resData = await onOrderEventTickets(params.id);
+      const pdf = await generateListPdfTickets(resData);
+
+      const ticketsRedc = reduceElements(
+        resData.tickets.map((ticket) => ({
+          ...ticket.ticket_type_id,
+          amount: 1,
+        })),
+        { elemen: "id" }
+      );
+
+      const html = completeOrderEmail({ ...resData, ticketsRedc });
+
+      await mailOrderCreated({
+        html: html,
+        pdf: pdf,
+        email: resData.user_id.email,
+        eventName: resData.event_id.event_name,
+      });
+
+      return {
+        data: resData,
         message: "",
         status: true,
       };

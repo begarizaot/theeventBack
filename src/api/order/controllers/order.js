@@ -16,6 +16,16 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       .getDowloandOrder({ params });
     return response;
   },
+  async getForwardMailOrder(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::order.order")
+      .getForwardMailOrder({ params, user });
+    return response;
+  },
   // -------------------------------------------------------------
   // POST
   async postCreatePayment(ctx) {

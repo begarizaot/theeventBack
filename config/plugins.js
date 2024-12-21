@@ -2,13 +2,13 @@ module.exports = ({ env }) => ({
   // ...
   email: {
     config: {
-      provider: 'sendgrid',
+      provider: "sendgrid",
       providerOptions: {
-        apiKey: env('SENDGRID_API_KEY'),
+        apiKey: env("SENDGRID_API_KEY"),
       },
       settings: {
-        defaultFrom: env('EMAIL_ADDRESS'),
-        defaultReplyTo: env('EMAIL_ADDRESS'),
+        defaultFrom: env("EMAIL_ADDRESS"),
+        defaultReplyTo: env("EMAIL_ADDRESS"),
       },
     },
   },
@@ -22,7 +22,9 @@ module.exports = ({ env }) => ({
         api_secret: env("CLOUDINARY_SECRET"),
       },
       actionOptions: {
-        upload: {},
+        upload: {
+          format: "png", // Forzar el formato PNG
+        },
         delete: {},
       },
     },

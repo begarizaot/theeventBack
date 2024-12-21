@@ -3,7 +3,10 @@
 const moment = require("moment");
 const { deletePreviousImage } = require("../../../services/cloudinary");
 const { encrypt } = require("../../../services/crypto");
+const { reduceElements } = require("../../../services/general");
 
+const { findManyTicket } = require("../../ticket/services/services");
+const { findPageOrder } = require("../../order/services/services");
 const { validateOrCreateMap } = require("../../map/services/services");
 const { findManyTeamAccess } = require("../../team-access/services/services");
 const {
@@ -235,6 +238,104 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       };
     }
   },
+  async getEventAnalytics(ctx) {
+    try {
+      const { params, user, query } = ctx;
+      const { id } = params;
+      const { page, size, search } = query;
+
+      const event = await findOneEvent({ id_event: id });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      const eventAnaly = await strapi.db.connection.raw(
+        `SELECT get_event_analy(?)`,
+        [event.id]
+      );
+
+      const orders = await findPageOrder(
+        {
+          event_id: event.id,
+          ...(search.length > 2 && {
+            $or: [
+              { user_id: { email: { $containsi: search || "" } } },
+              { user_id: { firstname: { $containsi: search || "" } } },
+              { user_id: { lastname: { $containsi: search || "" } } },
+            ],
+          }),
+        },
+        {
+          page,
+          pageSize: size,
+        }
+      );
+
+      const resOrders = await Promise.all(
+        orders.results
+          .map((order) => ({
+            ...order,
+            total_base: order?.price?.subTotal
+              ? order?.price?.subTotal || 0
+              : (order?.total_price || 0) - (order?.price?.price || 0),
+          }))
+          .map(async (order) => {
+            delete order.price;
+            delete order.total_price;
+            delete order.stripe_id;
+
+            const discount = order?.discount_code_id;
+            if (discount) {
+              if (discount.state == "val") {
+                order.total_base -= discount.value || 0;
+              } else {
+                order.total_base = Number(
+                  (
+                    order.total_base -
+                    (order.total_base * discount.value || 0) / 100
+                  ).toFixed(2)
+                );
+              }
+            }
+
+            const tickets = await findManyTicket({
+              order_id: order.id,
+            });
+            order.tickets = reduceElements(
+              tickets.map((ticket) => ({
+                ...ticket.ticket_type_id,
+                amount: 1,
+              })),
+              { elemen: "id" }
+            );
+            return order;
+          })
+      );
+
+      let eventAnalyRes = JSON.parse(eventAnaly.rows[0].get_event_analy);
+
+      if (user.id != event.organizer_id.id) {
+        eventAnalyRes.splice(0, 1);
+      }
+
+      return {
+        data: {
+          analytics: eventAnalyRes,
+          orders: resOrders,
+        },
+        pagination: orders.pagination,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
   // -------------------------------------------------------------
   // POST
   async postCreateEvent(ctx) {
@@ -315,15 +416,14 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         return { data: null, message: "Event not found", status: false };
       }
 
-      event?.image && event?.image?.id && deleteImage(event.image.id);
+      event?.image && event?.image[0]?.id && deleteImage(event.image[0].id);
 
       const createdFiles = await strapi.plugins.upload.services.upload.upload({
         data: {
           path: "events",
           fileInfo: {
-            name: `eventId_${event.id}`,
+            name: `eventId_${event.id}.png`,
             caption: "Caption",
-            alternativeText: event.event_name.replace(/ /g, "_"),
             folder: 1,
           },
         },
