@@ -8,38 +8,56 @@ const { createCoreController } = require("@strapi/strapi").factories;
 
 const table = "api::team-access.team-access";
 module.exports = createCoreController(table, ({ strapi }) => ({
-  async listTeamEvent(ctx) {
-    const data = {
-      params: ctx.params,
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).listTeamEvent(data);
+  // GET
+  async getTeamAccessList(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+    let response = await strapi
+      .service(table)
+      .getTeamAccessList({ params, user });
     return response;
   },
-  async createTeamAcces(ctx) {
-    const data = {
-      params: ctx.params,
-      body: ctx.request["body"],
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).createTeamAcces(data);
+  // -------------------------------------------------------------
+  // POST
+  async postCreateTeamAccess(ctx) {
+    const {
+      params,
+      state: { user },
+      request: { body },
+    } = ctx;
+    let response = await strapi
+      .service(table)
+      .postCreateTeamAccess({ params, user, body });
     return response;
   },
-  async updateTeamAcces(ctx) {
-    const data = {
-      params: ctx.params,
-      body: ctx.request["body"],
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).updateTeamAcces(data);
+  // -------------------------------------------------------------
+
+  // PUT
+  async putUpdateTeamAccess(ctx) {
+    const {
+      params,
+      state: { user },
+      request: { body },
+    } = ctx;
+    let response = await strapi
+      .service(table)
+      .putUpdateTeamAccess({ params, user, body });
     return response;
   },
-  async deleteTeamAcces(ctx) {
-    const data = {
-      params: ctx.params,
-      user: ctx.state.user,
-    };
-    let response = await strapi.service(table).deleteTeamAcces(data);
+  // -------------------------------------------------------------
+
+  // DELETE
+  async delRemoveTeamAccess(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+    let response = await strapi
+      .service(table)
+      .delRemoveTeamAccess({ params, user });
     return response;
   },
+  // -------------------------------------------------------------
 }));

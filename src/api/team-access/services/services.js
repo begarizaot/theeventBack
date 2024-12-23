@@ -33,7 +33,40 @@ const findManyTeamAccess = async (where = {}) => {
   });
 };
 
+const updateTeamAccess = async (where = {}, data = {}) => {
+  return strapi.query("api::team-access.team-access").update({
+    where: {
+      ...where,
+    },
+    data: data,
+    populate: populate,
+  });
+};
+
+const createTeamAccess = async (data = {}) => {
+  return strapi.query("api::team-access.team-access").create({
+    data: {
+      ...data,
+      publishedAt: new Date(),
+      state: true,
+    },
+    populate: populate,
+  });
+};
+
+const deleteTeamAccess = async (where = {}) => {
+  return strapi.query("api::team-access.team-access").delete({
+    where: {
+      ...where,
+    },
+    populate: populate,
+  });
+};
+
 module.exports = {
   findOneTeamAccess,
   findManyTeamAccess,
+  updateTeamAccess,
+  createTeamAccess,
+  deleteTeamAccess,
 };

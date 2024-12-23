@@ -45,7 +45,26 @@ const mailOrderCreated = async ({ email, eventName, html, pdf }) => {
   }
 };
 
+const mailSend = async (
+  data = {
+    email: "",
+    subject: "",
+    html: "",
+  }
+) => {
+  try {
+    const msg = {
+      to: data?.email || "",
+      from: `The Event Jet <${process.env.EMAIL_ADDRESS}>`,
+      subject: data.subject || "",
+      html: data.html || "",
+    };
+    await sgMail.send(msg);
+  } catch (err) {}
+};
+
 module.exports = {
   validateEmail,
   mailOrderCreated,
+  mailSend,
 };
