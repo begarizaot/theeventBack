@@ -40,6 +40,11 @@ module.exports = {
       path: "/event/getEventAnalytics/:id",
       handler: "event.getEventAnalytics",
     },
+    {
+      method: "GET",
+      path: "/event/getEventFreeTiekcts/:id",
+      handler: "event.getEventFreeTiekcts",
+    },
     // -------------------------------------------------------------
     // POST
     {

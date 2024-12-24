@@ -33,6 +33,11 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "POST",
+      path: "/order/postCreateFreeOrder",
+      handler: "order.postCreateFreeOrder",
+    },
     // -------------------------------------------------------------
   ],
 };

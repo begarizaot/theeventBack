@@ -46,6 +46,15 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       .service("api::order.order")
       .postCreateOrder({ body, user });
   },
+  async postCreateFreeOrder(ctx) {
+    const {
+      request: { body },
+      state: { user },
+    } = ctx;
+    return await strapi
+      .service("api::order.order")
+      .postCreateFreeOrder({ body, user });
+  },
   // -------------------------------------------------------------
   // PUT
 

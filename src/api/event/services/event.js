@@ -25,15 +25,10 @@ const {
  * discount service
  */
 
-const formatDataEvent = async (event, admin = false) => {
+const formatDataEvent = async (event) => {
   // Obtener tipos de tickets
   const ticketTypes = await findManyTicketTypes({
     event_id: event.id,
-    ...(!admin && {
-      end_date: {
-        $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
-      },
-    }),
   });
 
   // Calcular valores mínimo y máximo
@@ -135,7 +130,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
   },
   async getEventDetail(ctx) {
     try {
-      const { params } = ctx;
+      const { params, query } = ctx;
       const { id } = params;
 
       const event = await findOneEvent({ id_event: id });
@@ -186,7 +181,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
 
       const results = await Promise.all(
         events.results.map(async (event) => {
-          const formattedEvent = await formatDataEvent(event, true);
+          const formattedEvent = await formatDataEvent(event);
           return { ...event, ...formattedEvent };
         })
       );
@@ -328,7 +323,77 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         status: true,
       };
     } catch (error) {
-      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventFreeTiekcts(ctx) {
+    try {
+      const { params, user, query } = ctx;
+      const { id } = params;
+      const { page, size, search } = query;
+
+      const event = await findOneEvent({ id_event: id });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      const orders = await findPageOrder(
+        {
+          event_id: event.id,
+          // total_base: 0,
+          ...(search.length > 2 && {
+            $or: [
+              { user_id: { email: { $containsi: search || "" } } },
+              { user_id: { firstname: { $containsi: search || "" } } },
+              { user_id: { lastname: { $containsi: search || "" } } },
+            ],
+          }),
+        },
+        {
+          page,
+          pageSize: size,
+        }
+      );
+
+      const resOrders = await Promise.all(
+        orders.results.map(async (order) => {
+          delete order.price;
+          delete order.total_price;
+          delete order.stripe_id;
+
+          const tickets = await findManyTicket({
+            order_id: order.id,
+          });
+          order.tickets = reduceElements(
+            tickets.map((ticket) => ({
+              ...ticket.ticket_type_id,
+              amount: 1,
+            })),
+            { elemen: "id" }
+          );
+          return order;
+        })
+      );
+
+      return {
+        data: {
+          analytics: [
+            {
+              label: "Tickets Submitted",
+              value: orders.pagination.total,
+            },
+          ],
+          orders: resOrders,
+        },
+        pagination: orders.pagination,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
       return {
         status: false,
         data: null,
@@ -396,7 +461,6 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         status: true,
       };
     } catch (error) {
-      console.log(error);
       return {
         status: false,
         data: null,
@@ -438,7 +502,6 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         status: true,
       };
     } catch (error) {
-      console.log(error);
       return {
         status: false,
         data: null,

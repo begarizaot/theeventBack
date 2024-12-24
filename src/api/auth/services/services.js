@@ -1,14 +1,24 @@
 "use strict";
 
 const validateOrCreateUser = async (body) => {
-  let userData = await strapi.db.query("plugin::users-permissions.user").findOne({
-    where: { email: { $eqi: body.email } },
-    populate: true,
-  });
+  let userData = await strapi.db
+    .query("plugin::users-permissions.user")
+    .findOne({
+      where: { email: { $eqi: body.email } },
+      populate: true,
+    });
 
   if (!userData) {
     userData = strapi.db.query("plugin::users-permissions.user").create({
       data: { ...body, role: [3], publishedAt: new Date() },
+    });
+  } else {
+    userData = await strapi.db.query("plugin::users-permissions.user").update({
+      where: { id: userData.id },
+      data: body,
+      populate: {
+        role: true,
+      },
     });
   }
 
@@ -22,7 +32,14 @@ const findOneUser = async (where) => {
   });
 };
 
+const createUser = async (data) => {
+  return strapi.db.query("plugin::users-permissions.user").create({
+    data: { ...data, role: [3], publishedAt: new Date() },
+  });
+};
+
 module.exports = {
   validateOrCreateUser,
   findOneUser,
+  createUser,
 };

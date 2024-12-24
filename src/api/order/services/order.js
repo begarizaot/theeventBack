@@ -12,6 +12,7 @@ const { encrypt } = require("../../../services/crypto");
 
 const {
   findOneEventTicketTypes,
+  updateTicketTypes,
 } = require("../../ticket-type/services/services");
 const {
   createTicket,
@@ -286,6 +287,100 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
       updatePaymentIntents(body.payment.id, {
         metadata: { orderId: orderEncrypted },
       });
+
+      const ticketPromises = await Promise.all(
+        body?.tickets
+          .map((ticket) => {
+            return Array(ticket.quantity)
+              .fill(null)
+              .map(
+                async () =>
+                  await createTicket({
+                    ticket_type_id: ticket.id,
+                    order_id: order.id,
+                    event_id: event.id,
+                  })
+              );
+          })
+          .flat()
+      );
+
+      Promise.all(
+        body?.tickets.map((ticket) => {
+          findOneEventTicketTypes({ id: ticket.id }).then((res) => {
+            if (res?.id) {
+              updateTicketTypes(
+                { id: res.id },
+                { max_capacity: res.max_capacity - ticket.quantity }
+              );
+            }
+          });
+        })
+      );
+
+      ticketPromises.forEach((ticket) => {
+        updateTicket(
+          { id: ticket.id },
+          { id_ticket: encrypt(`ticket_${ticket.id}`) }
+        );
+      });
+
+      return {
+        status: true,
+        data: orderEncrypted,
+        message: "Order created successfully",
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the order",
+      };
+    }
+  },
+  async postCreateFreeOrder(ctx) {
+    try {
+      const { body, user } = ctx;
+
+      const event = await findOneEvent({ id_event: body.eventId });
+      if (!event?.id) {
+        return {
+          status: false,
+          data: null,
+          message: "Event not found",
+        };
+      }
+
+      if (event.organizer_id.id != user.id) {
+        return {
+          status: false,
+          data: null,
+          message: "You are not the owner of the event",
+        };
+      }
+
+      const userRes = await validateOrCreateUser({
+        username: body.email,
+        email: body.email,
+        confirmed: true,
+        lastname: body.lastName,
+        firstname: body.firstName,
+        phone: body.phone,
+      });
+
+      let reqData = {
+        total_price: 0,
+        price: body.values,
+        smsEmail: true,
+        event_id: event.id,
+        user_id: userRes.id,
+        status_order_id: 1,
+      };
+
+      const order = await createOrder(reqData);
+      const orderEncrypted = encrypt(`order_${order.id}`);
+      updateOrder({ id: order.id }, { id_order: orderEncrypted });
 
       const ticketPromises = await Promise.all(
         body?.tickets
