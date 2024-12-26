@@ -76,6 +76,17 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       .getEventFreeTiekcts({ params, user, query });
     return response;
   },
+  async getEventDiscountCode(ctx) {
+    const {
+      params,
+      request: { query },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .getEventDiscountCode({ params, user, query });
+    return response;
+  },
   // -------------------------------------------------------------
   // POTS
   async postCreateEvent(ctx) {

@@ -37,6 +37,9 @@
     "end_date": {
       "type": "datetime"
     },
+    "disable": {
+      "type": "boolean"
+    },
     "event_id": {
       "type": "relation",
       "relation": "oneToOne",

@@ -809,6 +809,7 @@ export interface ApiDiscountCodeDiscountCode extends Schema.CollectionType {
     amount_max: Attribute.Integer;
     start_date: Attribute.DateTime;
     end_date: Attribute.DateTime;
+    disable: Attribute.Boolean;
     event_id: Attribute.Relation<
       'api::discount-code.discount-code',
       'oneToOne',

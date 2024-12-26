@@ -45,6 +45,11 @@ module.exports = {
       path: "/event/getEventFreeTiekcts/:id",
       handler: "event.getEventFreeTiekcts",
     },
+    {
+      method: "GET",
+      path: "/event/getEventDiscountCode/:id",
+      handler: "event.getEventDiscountCode",
+    },
     // -------------------------------------------------------------
     // POST
     {

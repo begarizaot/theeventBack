@@ -10,6 +10,9 @@ const { findPageOrder } = require("../../order/services/services");
 const { validateOrCreateMap } = require("../../map/services/services");
 const { findManyTeamAccess } = require("../../team-access/services/services");
 const {
+  findPageDiscountCode,
+} = require("../../discount-code/services/services");
+const {
   findPageEvent,
   findOneEvent,
   updateEvent,
@@ -252,6 +255,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       const orders = await findPageOrder(
         {
           event_id: event.id,
+          total_price: { $ne: 0 },
           ...(search.length > 2 && {
             $or: [
               { user_id: { email: { $containsi: search || "" } } },
@@ -332,7 +336,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
   },
   async getEventFreeTiekcts(ctx) {
     try {
-      const { params, user, query } = ctx;
+      const { params, query } = ctx;
       const { id } = params;
       const { page, size, search } = query;
 
@@ -390,6 +394,52 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
           orders: resOrders,
         },
         pagination: orders.pagination,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventDiscountCode(ctx) {
+    try {
+      const { params, query } = ctx;
+      const { id } = params;
+      const { page, size, search } = query;
+
+      const event = await findOneEvent({ id_event: id });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      const discountCodes = await findPageDiscountCode(
+        {
+          event_id: event.id,
+          ...(search.length > 2 && {
+            $or: [{ name: { $containsi: search || "" } }],
+          }),
+        },
+        {
+          page,
+          pageSize: size,
+        }
+      );
+
+      return {
+        data: {
+          analytics: [
+            {
+              label: "Codes Created",
+              value: discountCodes.pagination.total,
+            },
+          ],
+          data: discountCodes.results,
+        },
+        pagination: discountCodes.pagination,
         message: "",
         status: true,
       };

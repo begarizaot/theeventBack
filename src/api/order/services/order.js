@@ -270,11 +270,11 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
           event_id: event.id,
         });
 
-        if (discountCode && discountCode.id) {
+        if (discountCode && discountCode.id && !discountCode.disable) {
           reqData.discount_code_id = discountCode.id;
           updateDiscountCode(
             { id: discountCode.id },
-            { amount: discountCode.amount - 1 }
+            { amount: (discountCode?.amount || 0) + 1 }
           );
         }
       }
