@@ -11,6 +11,13 @@ const findManyTicket = async (where = {}) => {
   });
 };
 
+const findOneTicket = async (where = {}) => {
+  return strapi.db.query("api::ticket.ticket").findOne({
+    where: { ...where, publishedAt: { $null: false } },
+    populate: true,
+  });
+};
+
 const createTicket = async (data) => {
   return strapi.db.query("api::ticket.ticket").create({
     data: { ...data, publishedAt: new Date() },
@@ -28,4 +35,5 @@ module.exports = {
   createTicket,
   updateTicket,
   findManyTicket,
+  findOneTicket,
 };

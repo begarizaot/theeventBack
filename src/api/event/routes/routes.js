@@ -50,6 +50,19 @@ module.exports = {
       path: "/event/getEventDiscountCode/:id",
       handler: "event.getEventDiscountCode",
     },
+    {
+      method: "GET",
+      path: "/event/getEventScanner/:idEvent/:idOrder",
+      handler: "event.getEventScanner",
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: "GET",
+      path: "/event/getEventScannerCreate/:idEvent/:idOrder",
+      handler: "event.getEventScannerCreate",
+    },
     // -------------------------------------------------------------
     // POST
     {

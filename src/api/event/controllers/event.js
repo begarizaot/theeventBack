@@ -28,7 +28,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   },
   async getEventDetail(ctx) {
     const { params } = ctx;
-    
+
     const response = await strapi
       .service("api::event.event")
       .getEventDetail({ params });
@@ -85,6 +85,25 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     const response = await strapi
       .service("api::event.event")
       .getEventDiscountCode({ params, user, query });
+    return response;
+  },
+  async getEventScanner(ctx) {
+    const { params } = ctx;
+
+    const response = await strapi
+      .service("api::event.event")
+      .getEventScanner({ params });
+    return response;
+  },
+  async getEventScannerCreate(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+
+    const response = await strapi
+      .service("api::event.event")
+      .getEventScannerCreate({ params, user });
     return response;
   },
   // -------------------------------------------------------------

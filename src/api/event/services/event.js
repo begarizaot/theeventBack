@@ -5,10 +5,20 @@ const { deletePreviousImage } = require("../../../services/cloudinary");
 const { encrypt } = require("../../../services/crypto");
 const { reduceElements } = require("../../../services/general");
 
-const { findManyTicket } = require("../../ticket/services/services");
-const { findPageOrder } = require("../../order/services/services");
+const {
+  findManyTicket,
+  findOneTicket,
+  updateTicket,
+} = require("../../ticket/services/services");
+const {
+  findPageOrder,
+  findOneOrder,
+} = require("../../order/services/services");
 const { validateOrCreateMap } = require("../../map/services/services");
-const { findManyTeamAccess } = require("../../team-access/services/services");
+const {
+  findManyTeamAccess,
+  findOneTeamAccess,
+} = require("../../team-access/services/services");
 const {
   findPageDiscountCode,
 } = require("../../discount-code/services/services");
@@ -448,6 +458,103 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         status: false,
         data: null,
         message: "An error occurred while fetching the events",
+      };
+    }
+  },
+  async getEventScanner(ctx) {
+    try {
+      const { params } = ctx;
+      const { idEvent, idOrder } = params;
+
+      const event = await findOneEvent({
+        id_event: idEvent,
+        end_date: {
+          $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+      });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      const ticket = await findOneTicket({ id_ticket: idOrder });
+      if (!ticket?.id) {
+        return { data: null, message: "Ticket not found", status: false };
+      }
+
+      if (ticket.scanner) {
+        return { data: null, message: "Ticket already scanned", status: false };
+      }
+
+      const order = await findOneOrder({ id: ticket.order_id.id });
+
+      const resData = {
+        id: idOrder || "",
+        name: `${order.user_id.firstname} ${order.user_id.lastname}`,
+        eventName: event?.event_name || "",
+        ticketType: ticket?.ticket_type_id.name || "",
+      };
+
+      return {
+        data: resData,
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "Ticket not found",
+      };
+    }
+  },
+  async getEventScannerCreate(ctx) {
+    try {
+      const { params, user } = ctx;
+      const { idEvent, idOrder } = params;
+
+      const event = await findOneEvent({
+        id_event: idEvent,
+        end_date: {
+          $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
+        },
+      });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      const userTeam = await findOneTeamAccess({
+        event_id: event.id,
+        user_id: user.id,
+      });
+
+      if (event.organizer_id.id != user.id && !userTeam?.id) {
+        return {
+          data: userTeam,
+          message: "You are not authorized to perform this action",
+          status: false,
+        };
+      }
+
+      const ticket = await findOneTicket({ id_ticket: idOrder });
+      if (!ticket?.id) {
+        return { data: null, message: "Ticket not found", status: false };
+      }
+
+      await updateTicket(
+        { id: ticket?.id },
+        { scanner: true, scanner_date: moment().format("YYYY-MM-DD HH:mm:ss") }
+      );
+
+      return {
+        data: {},
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "Ticket not found",
       };
     }
   },
