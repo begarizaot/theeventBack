@@ -19,6 +19,25 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "POST",
+      path: "/ticket-type/postCreateTicketEvent/:id",
+      handler: "ticket-type.postCreateTicketEvent",
+    },
+    // -------------------------------------------------------------
+    // PUT
+    {
+      method: "PUT",
+      path: "/ticket-type/putUpdateTicketEvent/:id",
+      handler: "ticket-type.putUpdateTicketEvent",
+    },
+    // -------------------------------------------------------------
+    // DELETE
+    {
+      method: "DELETE",
+      path: "/ticket-type/deleteTicketEvent/:id/:id_ticket",
+      handler: "ticket-type.deleteTicketEvent",
+    },
     // -------------------------------------------------------------
   ],
 };

@@ -77,6 +77,11 @@ module.exports = {
       path: "/event/putUpdateEventImage/:id",
       handler: "event.putUpdateEventImage",
     },
+    {
+      method: "PUT",
+      path: "/event/putUpdateEvent/:id",
+      handler: "event.putUpdateEvent",
+    },
     // -------------------------------------------------------------
   ],
 };

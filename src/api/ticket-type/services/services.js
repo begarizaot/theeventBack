@@ -25,6 +25,12 @@ const createManyTicketTypes = async (data = []) => {
   });
 };
 
+const createTicketTypes = async (data = []) => {
+  return strapi.query("api::ticket-type.ticket-type").create({
+    data: { ...data, publishedAt: new Date() },
+  });
+};
+
 const updateTicketTypes = async (where = {}, data = []) => {
   return strapi.query("api::ticket-type.ticket-type").update({
     data: data,
@@ -32,9 +38,17 @@ const updateTicketTypes = async (where = {}, data = []) => {
   });
 };
 
+const deleteTicketTypes = async (where = {}, data = []) => {
+  return strapi.query("api::ticket-type.ticket-type").delete({
+    where: where,
+  });
+};
+
 module.exports = {
   findManyTicketTypes,
   findOneEventTicketTypes,
   createManyTicketTypes,
+  createTicketTypes,
   updateTicketTypes,
+  deleteTicketTypes,
 };

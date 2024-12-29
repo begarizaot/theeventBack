@@ -131,5 +131,16 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       .putUpdateEventImage({ user, params, files });
     return response;
   },
+  async putUpdateEvent(ctx) {
+    const {
+      params,
+      request: { body },
+      state: { user },
+    } = ctx;
+    const response = await strapi
+      .service("api::event.event")
+      .putUpdateEvent({ user, params, body });
+    return response;
+  },
   // -------------------------------------------------------------
 }));

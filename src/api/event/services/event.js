@@ -666,5 +666,64 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       };
     }
   },
+  async putUpdateEvent(ctx) {
+    try {
+      const { body, user, params } = ctx;
+
+      const event = await findOneEvent({ id_event: params.id });
+
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      if (event.organizer_id.id != user.id) {
+        return {
+          data: null,
+          message: "You are not authorized to perform this action",
+          status: false,
+        };
+      }
+
+      const mapData = await validateOrCreateMap(
+        { idMap: body.map.idMap },
+        body.map
+      );
+
+      if (!mapData) {
+        return {
+          status: false,
+          data: null,
+          message: "An error occurred while fetching the events",
+        };
+      }
+
+      const eventData = {
+        event_name: body?.event_name,
+        youtube_url: body?.youtube_url,
+        contact_phone: `${body?.contact_phone}`,
+        venue: body?.venue,
+        description: body?.description,
+        start_date: body?.start_date,
+        end_date: body?.end_date,
+        event_category_id: body?.event_category,
+        event_age_restriction_id: body?.event_age_restriction,
+        map_id: mapData.id,
+      };
+
+      await updateEvent({ id_event: params.id }, eventData);
+
+      return {
+        data: {},
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "An error occurred while fetching the events",
+      };
+    }
+  },
   // -------------------------------------------------------------
 }));
