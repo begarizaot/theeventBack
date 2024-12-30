@@ -54,7 +54,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       .getEventSharedList({ query, user });
     return response;
   },
-  async getEventAnalytics(ctx) {
+  async getEventTicketControls(ctx) {
     const {
       params,
       request: { query },
@@ -62,7 +62,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     } = ctx;
     const response = await strapi
       .service("api::event.event")
-      .getEventAnalytics({ params, user, query });
+      .getEventTicketControls({ params, user, query });
     return response;
   },
   async getEventFreeTiekcts(ctx) {

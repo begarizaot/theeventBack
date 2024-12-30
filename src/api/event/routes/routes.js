@@ -37,8 +37,8 @@ module.exports = {
     },
     {
       method: "GET",
-      path: "/event/getEventAnalytics/:id",
-      handler: "event.getEventAnalytics",
+      path: "/event/getEventTicketControls/:id",
+      handler: "event.getEventTicketControls",
     },
     {
       method: "GET",

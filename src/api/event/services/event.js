@@ -143,7 +143,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
   },
   async getEventDetail(ctx) {
     try {
-      const { params, query } = ctx;
+      const { params } = ctx;
       const { id } = params;
 
       const event = await findOneEvent({ id_event: id });
@@ -246,7 +246,7 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       };
     }
   },
-  async getEventAnalytics(ctx) {
+  async getEventTicketControls(ctx) {
     try {
       const { params, user, query } = ctx;
       const { id } = params;
@@ -257,10 +257,10 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         return { data: null, message: "Event not found", status: false };
       }
 
-      const eventAnaly = await strapi.db.connection.raw(
-        `SELECT get_event_analy(?)`,
-        [event.id]
-      );
+      // const eventAnaly = await strapi.db.connection.raw(
+      //   `SELECT get_event_analy(?)`,
+      //   [event.id]
+      // );
 
       const orders = await findPageOrder(
         {
@@ -321,15 +321,15 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
           })
       );
 
-      let eventAnalyRes = JSON.parse(eventAnaly.rows[0].get_event_analy);
+      // let eventAnalyRes = JSON.parse(eventAnaly.rows[0].get_event_analy);
 
-      if (user.id != event.organizer_id.id) {
-        eventAnalyRes.splice(0, 1);
-      }
+      // if (user.id != event.organizer_id.id) {
+      //   eventAnalyRes.splice(0, 1);
+      // }
 
       return {
         data: {
-          analytics: eventAnalyRes,
+          analytics: [],
           orders: resOrders,
         },
         pagination: orders.pagination,

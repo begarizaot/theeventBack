@@ -4,7 +4,8 @@
   "info": {
     "singularName": "event-categorie",
     "pluralName": "event-categories",
-    "displayName": "eventCategories"
+    "displayName": "eventCategories",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true

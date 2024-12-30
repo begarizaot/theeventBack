@@ -931,6 +931,7 @@ export interface ApiEventCategorieEventCategorie extends Schema.CollectionType {
     singularName: 'event-categorie';
     pluralName: 'event-categories';
     displayName: 'eventCategories';
+    description: '';
   };
   options: {
     draftAndPublish: true;
