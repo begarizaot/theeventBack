@@ -54,7 +54,7 @@ const findPageEvent = async (
         $null: false,
       },
     },
-    orderBy: { start_date: "desc" },
+    orderBy: { start_date: !admin ? "asc" : "desc" },
     populate: populate,
     ...pageData,
   });
