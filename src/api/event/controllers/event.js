@@ -106,6 +106,17 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       .getEventScannerCreate({ params, user });
     return response;
   },
+  async getPublishEvent(ctx) {
+    const {
+      params,
+      state: { user },
+    } = ctx;
+
+    const response = await strapi
+      .service("api::event.event")
+      .getPublishEvent({ params, user });
+    return response;
+  },
   // -------------------------------------------------------------
   // POTS
   async postCreateEvent(ctx) {

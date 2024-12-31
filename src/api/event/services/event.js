@@ -558,6 +558,44 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
       };
     }
   },
+  async getPublishEvent(ctx) {
+    try {
+      const { params, user } = ctx;
+      const { id } = params;
+
+      const event = await findOneEvent({
+        id_event: id,
+      });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      if (event.organizer_id.id != user.id) {
+        return {
+          data: null,
+          message: "You are not authorized to perform this action",
+          status: false,
+        };
+      }
+
+      await updateEvent(
+        { id_event: id },
+        { status_event_id: event.status_event_id.id == 1 ? 3 : 1 }
+      );
+
+      return {
+        data: {},
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "Ticket not found",
+      };
+    }
+  },
   // -------------------------------------------------------------
   // POST
   async postCreateEvent(ctx) {

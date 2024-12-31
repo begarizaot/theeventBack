@@ -50,6 +50,9 @@ const findPageEvent = async (
           $gte: moment().format("YYYY-MM-DD HH:mm:ss"),
         },
       }),
+      ...(!admin && {
+        status_event_id: 1,
+      }),
       publishedAt: {
         $null: false,
       },
