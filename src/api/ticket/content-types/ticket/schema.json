@@ -16,7 +16,8 @@
       "type": "string"
     },
     "scanner": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "scanner_date": {
       "type": "datetime"

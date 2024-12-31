@@ -68,6 +68,11 @@ module.exports = {
       path: "/event/getPublishEvent/:id",
       handler: "event.getPublishEvent",
     },
+    {
+      method: "GET",
+      path: "/event/getAnalyticsEvent/:id",
+      handler: "event.getAnalyticsEvent",
+    },
     // -------------------------------------------------------------
     // POST
     {

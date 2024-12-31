@@ -257,11 +257,6 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
         return { data: null, message: "Event not found", status: false };
       }
 
-      // const eventAnaly = await strapi.db.connection.raw(
-      //   `SELECT get_event_analy(?)`,
-      //   [event.id]
-      // );
-
       const orders = await findPageOrder(
         {
           event_id: event.id,
@@ -320,12 +315,6 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
             return order;
           })
       );
-
-      // let eventAnalyRes = JSON.parse(eventAnaly.rows[0].get_event_analy);
-
-      // if (user.id != event.organizer_id.id) {
-      //   eventAnalyRes.splice(0, 1);
-      // }
 
       return {
         data: {
@@ -585,6 +574,46 @@ module.exports = createCoreService(apiEvent, ({ strapi }) => ({
 
       return {
         data: {},
+        message: "",
+        status: true,
+      };
+    } catch (error) {
+      return {
+        status: false,
+        data: null,
+        message: "Ticket not found",
+      };
+    }
+  },
+  async getAnalyticsEvent(ctx) {
+    try {
+      const { params, user } = ctx;
+      const { id } = params;
+
+      const event = await findOneEvent({
+        id_event: id,
+      });
+      if (!event?.id) {
+        return { data: null, message: "Event not found", status: false };
+      }
+
+      if (event.organizer_id.id != user.id) {
+        return {
+          data: null,
+          message: "You are not authorized to perform this action",
+          status: false,
+        };
+      }
+
+      const eventAnaly = await strapi.db.connection.raw(
+        `SELECT get_event_analy(?)`,
+        [event.id]
+      );
+
+      let eventAnalyRes = JSON.parse(eventAnaly.rows[0].get_event_analy);
+
+      return {
+        data: eventAnalyRes,
         message: "",
         status: true,
       };

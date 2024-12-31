@@ -1317,7 +1317,7 @@ export interface ApiTicketTicket extends Schema.CollectionType {
   };
   attributes: {
     id_ticket: Attribute.String;
-    scanner: Attribute.Boolean;
+    scanner: Attribute.Boolean & Attribute.DefaultTo<false>;
     scanner_date: Attribute.DateTime;
     order_id: Attribute.Relation<
       'api::ticket.ticket',
